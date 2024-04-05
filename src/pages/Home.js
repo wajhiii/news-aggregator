@@ -10,6 +10,7 @@ const Home = () => {
   const [articles, setArticles] = useState([]);
   const [filters, setFilters] = useState({});
   const [articleHeadlines, setArticleHeadlines] = useState([]);
+  const [loading, setLoading] = useState(false); 
 
   useEffect(() => {
     fetchHeadlinesApi();
@@ -17,64 +18,67 @@ const Home = () => {
   }, [filters]);
 
   const fetchHeadlinesApi = async () => {
-    const data = await ApiService.fetchHeadlinesApi(); // Placeholder function
+    setLoading(true); 
+    const data = await ApiService.fetchHeadlinesApi(); 
     setArticleHeadlines(data);
+    setLoading(false); 
   };
 
   const fetchNewsApi = async (filters) => {
-    const data = await ApiService.fetchNewsApi(filters); // Placeholder function
+    setLoading(true); 
+    const data = await ApiService.fetchNewsApi(filters); 
     setArticles(data);
+    setLoading(false); 
   };
 
   const applyFilters = (newFilters) => {
-        setFilters(newFilters);
+    setFilters(newFilters);
+  };
+
+  const onNextPage = (page) => {
+    filters.page = page;
+    fetchNewsApi(filters);
   };
 
   return (
     <div>
       <Header />
-      {/* <FilterBar applyFilters={applyFilters} />
-      <NewsFeed articles={articles} /> */}
       <section className="section first-section">
-            <div className="container-fluid">
-                <div className="masonry-blog clearfix">
-                 <Headlines articleHeadlines={articleHeadlines} />
+        <div className="container-fluid">
+          <div className="blog-top clearfix">
+            <h4 className="section-title">Headlines News</h4>
+          </div>
+          <div className="masonry-blog clearfix">
+            <Headlines articleHeadlines={articleHeadlines} />
+          </div>
+        </div>
+      </section>
 
-                    {/* <div className="second-slot">
-                        <div className="masonry-box post-media">
-                          <img src="upload/tech_02.jpg" alt="" class="img-fluid"/>
-                             <div className="shadoweffect">
-                                <div className="shadow-desc">
-                                    <div className="blog-meta">
-                                        <span className="bg-orange"><a href="tech-category-01.html" title="">Gadgets</a></span>
-                                        <h4><a href="tech-single.html" title="">Do not make mistakes when choosing web hosting</a></h4>
-                                        <small><a href="tech-single.html" title="">03 July, 2017</a></small>
-                                        <small><a href="tech-author.html" title="">by Jessica</a></small>
-                                    </div>
-                                </div>
-                             </div>
-                        </div>
-                    </div>
-
-                    <div className="last-slot">
-                        <div className="masonry-box post-media">
-                          <img src="upload/tech_03.jpg" alt="" class="img-fluid"/>
-                             <div className="shadoweffect">
-                                <div className="shadow-desc">
-                                    <div className="blog-meta">
-                                        <span className="bg-orange"><a href="tech-category-01.html" title="">Technology</a></span>
-                                        <h4><a href="tech-single.html" title="">The most reliable Galaxy Note 8 images leaked</a></h4>
-                                        <small><a href="tech-single.html" title="">01 July, 2017</a></small>
-                                        <small><a href="tech-author.html" title="">by Jessica</a></small>
-                                    </div>
-                                </div>
-                             </div>
-                        </div>
-                    </div> */}
+      <section className="section">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <div className="page-wrapper">
+                <div className="blog-top clearfix">
+                  <h4 className="pull-left">All News</h4>
                 </div>
+                <FilterBar applyFilters={applyFilters} />
+                <br />
+                {loading ? (
+                  <div className="text-center">Loading...</div>
+                ) : (
+                  <NewsFeed
+                    articles={articles.articles}
+                    totalResults={articles.totalResults}
+                    onNextPage={onNextPage}
+                  />
+                )}
+              </div>
             </div>
-        </section>
-        <Footer/>
+          </div>
+        </div>
+      </section>
+      <Footer />
     </div>
   );
 };

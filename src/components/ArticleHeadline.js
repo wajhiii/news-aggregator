@@ -8,10 +8,12 @@ const ArticleHeadline = ({ articleHeadline, index }) => {
         return new Date(date).toLocaleDateString('en-US', options).toUpperCase();
     };
 
+    const imageUrl = articleHeadline.urlToImage ? articleHeadline.urlToImage : 'upload/tech_01.jpg';
+    
     return (
         <div className='first-slot'>
             <div className="masonry-box post-media">
-                <img src={articleHeadline.urlToImage} alt="" className="img-fluid"/>
+                <img src={imageUrl} alt="" className="img-fluid" />
                 <div className="shadoweffect">
                     <div className="shadow-desc">
                         <div className="blog-meta">
