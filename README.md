@@ -10,6 +10,7 @@ News Aggregator is a web application built with React.js that allows users to se
 ## Data Sources
 The application fetches articles from multiple data sources, including:
 - NewsAPI
+- GuardianApi
 
 ## Setup Instructions
 
@@ -40,7 +41,7 @@ Open your browser and navigate to http://localhost:3000 to view the app.
 ## Docker Configuration
 
 ### Building Docker Image
-- docker build -t news-aggregator .
+- docker build -t news-aggregator PATH_TO_DOCKERFILE_DIRECTORY.
 
 ### Run the Docker container:
 - docker run -p 3000:3000 news-aggregator

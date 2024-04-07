@@ -669,8 +669,11 @@ mark,
 
 .img-fluid {
   max-width: 100%;
-  height: auto;
-  max-height:420px;
+  height: 356px;
+}
+
+.article-image{
+  max-width: 100%;
 }
 
 .img-thumbnail {

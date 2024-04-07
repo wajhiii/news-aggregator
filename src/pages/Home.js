@@ -4,6 +4,7 @@ import NewsFeed from '../components/NewsFeed';
 import Headlines from '../components/Headlines';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Preferences from '../components/Preferences';
 import ApiService from '../services/ApiService';
 
 const Home = () => {
@@ -11,15 +12,25 @@ const Home = () => {
   const [filters, setFilters] = useState({});
   const [articleHeadlines, setArticleHeadlines] = useState([]);
   const [loading, setLoading] = useState(false); 
+  const [preferences, setPreferences] = useState({
+    source: 1,
+    category: '',
+    author: ''
+  });
+
 
   useEffect(() => {
-    fetchHeadlinesApi();
-    fetchNewsApi(filters);
+    fetchHeadlinesNewsApi();
+    if(preferences.source == 2){
+      fetchGuardianNewsApi(filters);
+    }else{
+      fetchNewsApi(filters);
+    }
   }, [filters]);
 
-  const fetchHeadlinesApi = async () => {
+  const fetchHeadlinesNewsApi = async () => {
     setLoading(true); 
-    const data = await ApiService.fetchHeadlinesApi(); 
+    const data = await ApiService.fetchHeadlinesNewsApi(); 
     setArticleHeadlines(data);
     setLoading(false); 
   };
@@ -31,22 +42,42 @@ const Home = () => {
     setLoading(false); 
   };
 
+  const fetchGuardianNewsApi = async (filters) => {
+    setLoading(true); 
+    const data = await ApiService.fetchGuardianNewsApi(filters);
+    setArticles(data);
+    setLoading(false);  
+  };
+
   const applyFilters = (newFilters) => {
     setFilters(newFilters);
   };
 
   const onNextPage = (page) => {
     filters.page = page;
-    fetchNewsApi(filters);
+    if(preferences.source == 2){
+      fetchGuardianNewsApi(filters);
+    }else{
+      fetchNewsApi(filters);
+    }
+  };
+
+  const updatePreferences = (newPreferences) => {
+    setPreferences(newPreferences);
+    if(newPreferences.source == 2){
+      fetchGuardianNewsApi(filters);
+    }else{
+      fetchNewsApi(filters);
+    }
   };
 
   return (
     <div>
       <Header />
       <section className="section first-section">
-        <div className="container-fluid">
-          <div className="blog-top clearfix">
-            <h4 className="section-title">Headlines News</h4>
+        <div className="container-fluid mt-5">
+          <div className="blog-top clearfix mb-3 ">
+            <h2 className="section-title text-center">Top Headlines</h2>
           </div>
           <div className="masonry-blog clearfix">
             <Headlines articleHeadlines={articleHeadlines} />
@@ -62,14 +93,17 @@ const Home = () => {
                 <div className="blog-top clearfix">
                   <h4 className="pull-left">All News</h4>
                 </div>
-                <FilterBar applyFilters={applyFilters} />
+                <Preferences updatePreferences={updatePreferences} />
+                <br/>
+                <FilterBar applyFilters={applyFilters} selectsSource={preferences.source} />
                 <br />
                 {loading ? (
                   <div className="text-center">Loading...</div>
                 ) : (
                   <NewsFeed
-                    articles={articles.articles}
-                    totalResults={articles.totalResults}
+                    preferences={preferences}
+                    articles={preferences.source == 1 ? articles.articles : articles.results}
+                    totalResults={preferences.source == 1 ? articles.totalResults : articles.total}
                     onNextPage={onNextPage}
                   />
                 )}

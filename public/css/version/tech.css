@@ -67,6 +67,10 @@ h5 {
     padding: 0.6rem 0.6rem 0 !important;
 }
 
+button{
+    cursor:pointer;
+}
+
 .first-slot {
     float: left;
     width: 50%;
@@ -94,10 +98,6 @@ h5 {
 
 .single-wrapper {
     margin-top: 3.5rem;
-}
-
-.first-section {
-    margin-top: 4rem;
 }
 
 .blog-grid-system .color-orange {

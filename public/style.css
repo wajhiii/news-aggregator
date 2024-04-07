@@ -404,6 +404,7 @@ div.tab button:hover {
 
 .section {
     padding: 4rem 0;
+    padding-bottom: 0px;
     display: block;
     position: relative;
     background-color: #ffffff;

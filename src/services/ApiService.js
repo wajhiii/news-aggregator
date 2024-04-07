@@ -20,7 +20,7 @@ class ApiService {
         return data;
       }
 
-      static async fetchHeadlinesApi() {
+      static async fetchHeadlinesNewsApi() {
         // Construct the URL with query parameters including keyword, sources, from, and sortBy
         const url = new URL('https://newsapi.org/v2/top-headlines');
         const params = {
@@ -34,6 +34,25 @@ class ApiService {
         const response = await fetch(url);
         const data = await response.json();
         return data.articles;
+      }
+
+
+      static async fetchGuardianNewsApi(filters) {
+        // Construct the URL with query parameters including keyword, sources, from, and sortBy
+        const url = new URL('https://content.guardianapis.com/search');
+        const params = {
+            q: filters.keyword || undefined,
+            from: filters.from || '',
+            page: filters.page || 1,
+            'order-by': 'newest',
+            'show-fields':'thumbnail,trailText,byline',
+            'api-key': '888dc2eb-4065-4f1e-820c-ec6fa09093be',
+        };
+        url.search = new URLSearchParams(params).toString();
+        // Perform API request to NewsAPI using constructed URL
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.response;
       }
   }
   

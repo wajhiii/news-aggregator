@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Article from './Article';
 import Pagination from './Pagination'; // Import the Pagination component
 
-const NewsFeed = ({ articles, totalResults, onNextPage }) => {
+const NewsFeed = ({ preferences, articles, totalResults, onNextPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const totalPages = Math.ceil(totalResults / 10); // Assuming 10 articles per page
 
@@ -14,7 +14,7 @@ const NewsFeed = ({ articles, totalResults, onNextPage }) => {
   return (
       <div className="blog-list clearfix">
         {articles && articles.map((article, index) => (
-          <Article key={index} article={article} />
+          <Article key={index} article={article} type={preferences.source} />
         ))}
         <div className="row">
             <div className="col-md-12">
