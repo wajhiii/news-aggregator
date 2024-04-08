@@ -14,8 +14,9 @@ function Preferences({ updatePreferences }) {
     const newSource = e.target.value; 
     setSource(newSource); 
   };
+
   const authorsBySource = {
-    1: ['Taylor Hall', 'Diana Usama'],
+    1: ['Taylor Hall', 'Diana Usama', 'Emily Stewart', 'Jacob Shamsian'],
     2: ['Emma Johnson', 'Oliver Davis','Isabella Parker','Liam Thompson'],
   };
   return (
@@ -29,15 +30,15 @@ function Preferences({ updatePreferences }) {
               <option value="2">The Guardian</option>
             </select>
           </div>
-          <div className="col-md-3 mb-3">
+          {source == 2 && (<div className="col-md-3 mb-3">
             Select Category:
             <select className="form-control" value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">All</option>
-              <option value="technology">Technology</option>
-              <option value="sports">Sports</option>
-              <option value="politics">Politics</option>
+              <option value="technology/technology">Technology</option>
+              <option value="film/film">Film</option>
+              <option value="politics/politics">Politics</option>
             </select>
-          </div>
+          </div>)}
           <div className="col-md-3 mb-3">
             Select Author:
             <select className="form-control" value={author} onChange={(e) => setAuthor(e.target.value)}>

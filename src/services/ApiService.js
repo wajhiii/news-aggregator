@@ -1,6 +1,6 @@
 class ApiService {
-
-    static async fetchNewsApi(filters) {
+  
+    static async fetchNewsApi(preferences, filters) {
         // Construct the URL with query parameters including keyword, sources, from, and sortBy
         const url = new URL('https://newsapi.org/v2/everything');
         const params = {
@@ -37,19 +37,28 @@ class ApiService {
       }
 
 
-      static async fetchGuardianNewsApi(filters) {
+      static async fetchGuardianNewsApi(preferences, filters) {
         // Construct the URL with query parameters including keyword, sources, from, and sortBy
         const url = new URL('https://content.guardianapis.com/search');
         const params = {
             q: filters.keyword || undefined,
-            from: filters.from || '',
             page: filters.page || 1,
-            'order-by': 'newest',
+            'tag': preferences.category || '',
+            'from-date': filters.from || '',
+            'order-by': filters.sortBy || '',
             'show-fields':'thumbnail,trailText,byline',
             'api-key': '888dc2eb-4065-4f1e-820c-ec6fa09093be',
         };
-        url.search = new URLSearchParams(params).toString();
-        // Perform API request to NewsAPI using constructed URL
+
+        const filteredParams = {};
+        for (const key in params) {
+          if (params[key] !== '' && params[key] !== undefined) {
+            filteredParams[key] = params[key];
+          }
+        }
+
+        url.search = new URLSearchParams(filteredParams).toString();
+
         const response = await fetch(url);
         const data = await response.json();
         return data.response;

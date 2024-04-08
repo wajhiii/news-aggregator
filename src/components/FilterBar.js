@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
-const FilterBar = ({ applyFilters }) => {
+const FilterBar = ({ applyFilters, selectsSource }) => {
   const [keyword, setKeyword] = useState('');
   const [from, setFrom] = useState(''); 
   const [sortBy, setSortBy] = useState('popularity');
   const [source, setSource] = useState('business-insider');
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const filters = {
@@ -48,7 +47,7 @@ const FilterBar = ({ applyFilters }) => {
           />
         </div>
         <div className="col-md-3 mb-3">
-          <select
+          {selectsSource == 1 && (<select
             className="form-control"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
@@ -57,8 +56,20 @@ const FilterBar = ({ applyFilters }) => {
             <option value="publishedAt">Published Date</option>
             <option value="relevancy">Relevancy</option>
           </select>
+          )}
+
+          {selectsSource == 2 && (<select
+                    className="form-control"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                  >
+                    <option value="relevance">Relevance</option>
+                    <option value="newest">Newest</option>
+                    <option value="oldest">Oldest</option>
+                  </select>
+          )}
         </div>
-        <div className="col-md-3 mb-3">
+        {selectsSource == 1 && (<div className="col-md-3 mb-3">
           <input
             type="text"
             className="form-control"
@@ -66,7 +77,7 @@ const FilterBar = ({ applyFilters }) => {
             value={source}
             onChange={(e) => setSource(e.target.value)}
           />
-        </div>
+        </div>)}
         <div className="col-md-12 d-flex justify-content-end">
           <button type="submit" className="btn btn-primary mr-2" onClick={handleSubmit}>Apply Filters</button>
           <button type="button" className="btn btn-secondary" onClick={clearFilters}>Clear Filters</button>

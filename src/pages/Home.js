@@ -22,9 +22,9 @@ const Home = () => {
   useEffect(() => {
     fetchHeadlinesNewsApi();
     if(preferences.source == 2){
-      fetchGuardianNewsApi(filters);
+      fetchGuardianNewsApi(preferences, filters);
     }else{
-      fetchNewsApi(filters);
+      fetchNewsApi(preferences, filters);
     }
   }, [filters]);
 
@@ -35,16 +35,16 @@ const Home = () => {
     setLoading(false); 
   };
 
-  const fetchNewsApi = async (filters) => {
+  const fetchNewsApi = async (preferences, filters) => {
     setLoading(true); 
-    const data = await ApiService.fetchNewsApi(filters); 
+    const data = await ApiService.fetchNewsApi(preferences, filters); 
     setArticles(data);
     setLoading(false); 
   };
 
-  const fetchGuardianNewsApi = async (filters) => {
+  const fetchGuardianNewsApi = async (preferences, filters) => {
     setLoading(true); 
-    const data = await ApiService.fetchGuardianNewsApi(filters);
+    const data = await ApiService.fetchGuardianNewsApi(preferences, filters);
     setArticles(data);
     setLoading(false);  
   };
@@ -56,18 +56,18 @@ const Home = () => {
   const onNextPage = (page) => {
     filters.page = page;
     if(preferences.source == 2){
-      fetchGuardianNewsApi(filters);
+      fetchGuardianNewsApi(preferences, filters);
     }else{
-      fetchNewsApi(filters);
+      fetchNewsApi(preferences, filters);
     }
   };
 
   const updatePreferences = (newPreferences) => {
     setPreferences(newPreferences);
     if(newPreferences.source == 2){
-      fetchGuardianNewsApi(filters);
+      fetchGuardianNewsApi(newPreferences, filters);
     }else{
-      fetchNewsApi(filters);
+      fetchNewsApi(newPreferences, filters);
     }
   };
 
@@ -105,6 +105,7 @@ const Home = () => {
                     articles={preferences.source == 1 ? articles.articles : articles.results}
                     totalResults={preferences.source == 1 ? articles.totalResults : articles.total}
                     onNextPage={onNextPage}
+                    page={filters.page || 1}
                   />
                 )}
               </div>
